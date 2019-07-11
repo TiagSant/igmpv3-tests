@@ -89,7 +89,7 @@ def dump_packet(data):
     i = 0
     for x in data:
         if i == 4:
-            print ''
+            print ('')
             i = 0
         i += 1
         sys.stdout.write(' %0.2x' % ord(x))
