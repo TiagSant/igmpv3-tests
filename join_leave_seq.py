@@ -31,7 +31,7 @@ required.add_argument('-s', '--source', help='IGMP message source', type=str, re
 args = parser.parse_args()
 
 if not(args.number in range(1, MAX_NUM_OF_JOIN_LEAVE)):
-    print 'Error: invalid number of multicast groups. Max number is ' + str(MAX_NUM_OF_GROUPS)
+    print ('Error: invalid number of multicast groups. Max number is ' + str(MAX_NUM_OF_GROUPS))
     sys.exit(1)
 
 dst = '224.0.0.22' # "to all IGMPv3 capable routers"
@@ -39,7 +39,7 @@ slock = threading.Semaphore() # socket is global. For now, only one task per soc
 
 def signal_handler(signal, frame):
     global stop
-    print 'Test interrupted by Ctrl+C!'
+    print ('Test interrupted by Ctrl+C!')
     stop = True
 
 class igmp_t(threading.Thread):
@@ -63,7 +63,7 @@ class igmp_t(threading.Thread):
                         report_type = 'leave'
                     info_s = '{0:4} {1:41}'.format(str(inc) + ':', 'Sending IGMP' + args.igmp_version + ' report (' + report_type + ') for group: ')
                     info_s += '{0:15}'.format(group)
-                    print info_s
+                    print (info_s)
                     igmp_r = mk_igmp_report(args.igmp_version, args.source, report_type, group, [])
                     if (args.dump == True):
                         dump_packet(igmp_r)
@@ -80,7 +80,7 @@ s.setsockopt(IPPROTO_IP, IP_HDRINCL, 1)
 s.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, 2)
 stop = False
 
-print 'Press Ctrl+C to quit'
+print ('Press Ctrl+C to quit')
 test_tread = igmp_t()
 test_tread.start()
 signal.signal(signal.SIGINT, signal_handler)
