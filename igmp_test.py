@@ -49,18 +49,18 @@ required.add_argument('-t', '--type', help="IGMP report message type", type=str,
 
 args = parser.parse_args()
 if not(args.number in range(1, MAX_NUM_OF_GROUPS)):
-    print 'Error: invalid number of multicast groups. Max number is ' + str(MAX_NUM_OF_GROUPS)
+    print ('Error: invalid number of multicast groups. Max number is ' + str(MAX_NUM_OF_GROUPS))
     sys.exit(IGMP_TEST_INVALID_ARG)
 
 if args.source != '':
     try:        
         inet_aton(args.source)
     except error:
-        print 'Error: invalid source IP address: ' + args.source
+        print ('Error: invalid source IP address: ' + args.source)
         sys.exit(IGMP_TEST_INVALID_ARG)
 
 if not is_ipv4_mc(args.mcgroup):
-    print 'Error: invalid IPv4 multicast address '
+    print ('Error: invalid IPv4 multicast address ')
     sys.exit(IGMP_TEST_INVALID_ARG)
 
 def is_ipv4_unicast(a):
@@ -69,20 +69,20 @@ def is_ipv4_unicast(a):
 
 def parse_args(args):
     if args.filter_mode == 'include' and args.type == 'join' and args.list_of_srcs == []:
-        print "Error: trying to include empty multicast src-list in a join message."
+        print ("Error: trying to include empty multicast src-list in a join message.")
         sys.exit(IGMP_TEST_INVALID_ARG)
     if args.igmp_version == 'v2' and args.list_of_srcs != []:
-        print "Error: trying to use multicast source list while IGMPv2 is selected: unsupported action"
+        print ("Error: trying to use multicast source list while IGMPv2 is selected: unsupported action")
         sys.exit(IGMP_TEST_INVALID_ARG)
     for s in args.list_of_srcs:
         if not is_ipv4_mc(s):
-            print "Error: invalid source address in the src address list"
+            print ("Error: invalid source address in the src address list")
             sys.exit(IGMP_TEST_INVALID_ARG)
     #todo: check argument validity. E.g. no source-address-lists in "leave" msg etc
 
 def signal_handler(signal, frame):
     global stop
-    print 'Test interrupted by Ctrl+C!'
+    print ('Test interrupted by Ctrl+C!')
     stop = True
 
 class igmp_t(threading.Thread):
@@ -96,7 +96,7 @@ class igmp_t(threading.Thread):
         a2 = args.mcgroup.split('.')[2]
         a3 = args.mcgroup.split('.')[3]
         start_time = datetime.datetime.now()
-        print 'test start time: ' + str(start_time)
+        print ('test start time: ' + str(start_time))
         for i,j, k in product(range(int(a1),255),range(int(a2),255),range(int(a3),255)):
             if not stop:
                 if inc < args.number:
@@ -128,12 +128,12 @@ class igmp_t(threading.Thread):
         # print some test stats
         stop_time = datetime.datetime.now()
         test_delta = stop_time - start_time
-        print '\ntest duration was ' + str(test_delta)
+        print ('\ntest duration was ' + str(test_delta))
         avg_rate = (sent_bytes * 8) / float(test_delta.microseconds + test_delta.seconds * 1000000)
         pkts_per_second = inc / float(test_delta.microseconds/float(1000000) + test_delta.seconds)
         info_s = str(sent_bytes) + ' bytes sent at rate ' 
         info_s += format('%.3f' % avg_rate) + ' Mbps (avg ' + format('%.0f' % pkts_per_second) + ' packets/s)'
-        print info_s
+        print (info_s)
 
 parse_args(args)
 if os.geteuid() != 0: # accessing system sockets require root priviledges
@@ -145,7 +145,7 @@ s.setsockopt(IPPROTO_IP, IP_HDRINCL, 1)
 s.setsockopt(IPPROTO_IP, IP_MULTICAST_TTL, 2)
 stop = False
 
-print 'Press Ctrl+C to quit'
+print ('Press Ctrl+C to quit')
 join_thread = igmp_t()
 join_thread.start()
 signal.signal(signal.SIGINT, signal_handler)
