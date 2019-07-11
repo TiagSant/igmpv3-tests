@@ -8,7 +8,7 @@ from struct import *
 from itertools import *
 from time import *
 import sys
-import IN
+#import IN
 import threading
 import signal
 
@@ -93,7 +93,7 @@ def dump_packet(data):
             i = 0
         i += 1
         sys.stdout.write(' %0.2x' % ord(x))
-    print ''
+    print ('')
 
 def mk_igmp_msg(msg_type, group, record_type, src_list):
     if msg_type == IGMPV2_REPORT or msg_type == IGMP_LEAVE:
@@ -105,7 +105,7 @@ def mk_igmp_msg(msg_type, group, record_type, src_list):
         for a in src_list:
             pkt += pack('!4s', inet_aton(a))
     else:
-        print 'unsupported report type: ' + str(msg_type)
+        print ('unsupported report type: ' + str(msg_type))
         sys.exit(1)
     return pkt
 
@@ -143,7 +143,7 @@ def mk_igmp_report(igmp_version, src, report_type, group, src_list, filter_mode)
             mk_igmp = mk_igmpv3_leave_msg
             src_list = []
         else:
-            print "unsupported IGMP report type " + report_type + ". Supported values: 'join' and 'lave'" 
+            print ("unsupported IGMP report type " + report_type + ". Supported values: 'join' and 'lave'") 
             sys.exit(1)
     elif igmp_version == 'v2':
         dst = group
@@ -154,10 +154,10 @@ def mk_igmp_report(igmp_version, src, report_type, group, src_list, filter_mode)
             mk_igmp = mk_igmpv2_leave_msg
             src_list = []
         else:
-            print "unsupported IGMP report type " + report_type + ". Supported values: 'join' and 'lave'" 
+            print ("unsupported IGMP report type " + report_type + ". Supported values: 'join' and 'lave'") 
             sys.exit(1)
     else:
-        print "unsupported IGMP version " + igmp_version + ". Supported versions are 'v2' & 'v3'"
+        print ("unsupported IGMP version " + igmp_version + ". Supported versions are 'v2' & 'v3'")
         sys.exit(1)
 
     if igmp_version == 'v3':
