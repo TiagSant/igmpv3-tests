@@ -108,7 +108,7 @@ class igmp_t(threading.Thread):
                 info_s = '{0:6} {1:27}'.format(str(inc) + '.', str((datetime.datetime.now())))
                 info_s += '{0:41}'.format('Sending IGMP' + args.igmp_version + ' report (' + args.type + ') for group: ')
                 info_s += '{0:15}'.format(group)
-                print info_s
+                print (info_s)
                 igmp_r = mk_igmp_report(args.igmp_version, args.source, args.type, group, src_list, args.filter_mode)
                 sent_bytes += len(igmp_r) + ETHERNET_HEADER_SIZE
 
